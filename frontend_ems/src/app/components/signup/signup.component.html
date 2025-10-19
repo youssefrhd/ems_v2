@@ -1,0 +1,103 @@
+<div class="flex items-center justify-center min-h-screen dark:bg-gray-900 bg-gray-100">
+  <div class="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-10">
+    <h1 class="text-3xl font-semibold text-gray-700 dark:text-gray-300 text-center">
+      Create Account
+    </h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
+      Join us today for an amazing experience.
+    </p>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-5 mt-6">
+      <div>
+        <label for="userName" class="block text-gray-600 dark:text-gray-400 text-sm mb-2">
+          Username
+        </label>
+        <input
+          type="text"
+          id="userName"
+          formControlName="userName"
+          placeholder="Enter your username"
+          class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <small class="text-red-500" *ngIf="signupForm.get('userName')?.invalid && signupForm.get('userName')?.touched">
+          Username is required
+        </small>
+      </div>
+
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="block text-gray-600 dark:text-gray-400 text-sm mb-2">
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="example@email.com"
+          class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <small class="text-red-500" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+          Enter a valid email
+        </small>
+      </div>
+
+      <!-- Password Field -->
+      <div>
+        <label for="password" class="block text-gray-600 dark:text-gray-400 text-sm mb-2">
+          Password
+        </label>
+        <div class="relative"><input
+          [type]="hidePassword ? 'password' : 'text'"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    (click)="togglePasswordVisibility()"
+                  >
+                    <fa-icon
+                      [icon]="hidePassword ? faEye : faEyeSlash"
+                      class="text-gray-500 dark:text-gray-400"
+                    ></fa-icon>
+                  </button></div>
+        <small class="text-red-500" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+          Password must be at least 6 characters
+        </small>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div>
+        <label for="confirmPassword" class="block text-gray-600 dark:text-gray-400 text-sm mb-2">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+          class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <small class="text-red-500" *ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched">
+          Passwords do not match
+        </small>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        [disabled]="signupForm.invalid"
+        class="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-purple-500 hover:to-blue-500 shadow-lg transition-transform transform hover:scale-105 disabled:opacity-50"
+      >
+        SIGN UP
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-4">
+      Already have an account?
+      <a routerLink="/login" class="text-blue-500 hover:underline">Log in</a>
+    </p>
+  </div>
+</div>

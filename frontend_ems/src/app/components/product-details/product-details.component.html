@@ -1,0 +1,115 @@
+<div
+  class="bg-black min-h-screen flex justify-center items-center"
+  *ngIf="product()"
+>
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+    <!-- Left: Product Images -->
+    <div class="space-y-4">
+      <div
+        class="h-96 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center"
+      >
+        <img
+          src="/assets/images/img{{ product()?.product_id }}.jpg"
+          alt="Main Product"
+          class="h-full object-cover"
+        />
+      </div>
+      <!-- Thumbnails -->
+      <div class="flex gap-4">
+        <div
+          class="h-24 w-24 rounded-lg overflow-hidden bg-gray-100 border-2 border-orange-500 flex items-center justify-center"
+        >
+          <img
+            src="assets/images/thumb1.jpg"
+            alt="Thumbnail"
+            class="h-full object-cover"
+          />
+        </div>
+        <div
+          class="h-24 w-24 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center"
+        >
+          <img
+            src="assets/images/thumb2.jpg"
+            alt="Thumbnail"
+            class="h-full object-cover"
+          />
+        </div>
+        <div
+          class="h-24 w-24 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center"
+        >
+          <img
+            src="assets/images/thumb3.jpg"
+            alt="Thumbnail"
+            class="h-full object-cover"
+          />
+        </div>
+        <div
+          class="h-24 w-24 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center"
+        >
+          <img
+            src="src/assets/images/thumb4.jpg"
+            alt="Thumbnail"
+            class="h-full object-contain"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Product Details -->
+    <div class="space-y-6 ">
+      <div>
+        <h4 class="text-red-500 uppercase text-sm font-bold font-outfit">
+          XTech Company
+        </h4>
+        <h1 class="text-7xl font-bold font-outfit text-gray-600">
+          Fall Limited Edition Phones
+        </h1>
+        <p class="text-gray-500 mt-4">
+          These low-profile sneakers are your perfect casual wear companion.
+          Featuring a durable rubber outer sole, they'll withstand everything
+          the weather can offer.
+        </p>
+      </div>
+
+      <!-- Price -->
+      <div class="space-y-2">
+        <div class="flex items-center space-x-4">
+          <span class="text-2xl font-bold text-gray-900"
+            >${{ updatedPrice() | number:'1.2-2'}}</span
+          >
+          <span
+            class="text-orange-500 font-bold text-lg bg-orange-100 px-2 py-1 rounded-md"
+            >- {{product()?.discount }} %</span
+          >
+        </div>
+        <span class="line-through text-gray-400"
+          >${{product()?.unit_price | number:'1.2-2'}}</span
+        >
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center border rounded-lg overflow-hidden">
+          <button
+            class="px-4 py-2 bg-gray-100 text-gray-500 hover:bg-gray-200"
+            (click)="decreaseQuantity()"
+          >
+            -
+          </button>
+
+          <span class="px-4 py-2 bg-white text-black-900">{{
+            quantity()
+          }}</span>
+          <button
+            class="px-4 py-2 bg-gray-100 text-gray-500 hover:bg-gray-200"
+            (click)="increaseQuantity()"
+          >
+            +
+          </button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!product()">Loading...</div>

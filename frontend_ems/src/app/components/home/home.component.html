@@ -1,0 +1,212 @@
+<div class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative h-screen overflow-hidden">
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover">
+        <source src="/assets/videos/hero.mp4" type="video/mp4">
+      </video>
+      
+      <div class="relative z-10 h-full flex flex-col justify-center px-8 lg:px-32">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fadeIn">
+          The Future of <span class="text-blue-400">Technology</span>
+        </h1>
+        <p class="text-xl md:text-2xl max-w-2xl mb-8 animate-fadeIn delay-100">
+          Discover cutting-edge electronics designed to inspire innovation and transform your digital life.
+        </p>
+        <button 
+          class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full text-lg font-medium w-fit animate-fadeIn delay-200 transition-all duration-300 transform hover:scale-105"
+          routerLink="/products">
+          Shop Now
+        </button>
+      </div>
+      
+      <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </section>
+  
+    <!-- Featured Products -->
+    <section class="py-20 px-8 lg:px-32">
+      <div class="flex justify-between items-center mb-12">
+        <h2 class="text-3xl font-bold">Featured <span class="text-blue-400">Products</span></h2>
+        <a routerLink="/products" class="text-blue-400 hover:underline">View All</a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let product of products()" 
+             class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 group">
+          <div class="relative overflow-hidden h-64">
+            <img [src]="'/assets/images/img' + product.product_id + '.jpg'" [alt]="product.name" 
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            <div *ngIf="product.discount" 
+                 class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+              -{{product.discount}}%
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">{{product.name}}</h3>
+            <div class="flex items-center mb-4">
+              <div class="flex text-yellow-400">
+                <span *ngFor="let star of [1,2,3,4,5]">★</span>
+              </div>
+              <span class="text-gray-400 ml-2">({{product.reviews}})</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-bold">${{product.unit_price| number:'1.2-2'}}</span>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Categories -->
+    <section class="py-20 px-8 lg:px-32 bg-gray-800">
+      <h2 class="text-3xl font-bold text-center mb-16">Shop by <span class="text-blue-400">Category</span></h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        @for (category of categoryCount(); track category.category) {
+          <div class="bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-700 transition-all">
+            <div class="text-5xl mb-4">{{category.icon}}</div>
+            <h3 class="text-xl font-semibold mb-2">{{category.category}}</h3>
+            <p class="text-gray-400">{{category.count}} products</p>
+          </div>
+        } @empty {
+          <p>No categories found</p>
+        }
+      </div>
+    </section>
+  
+    <!-- New Arrivals -->
+    <section class="py-20 px-8 lg:px-32">
+      <div class="flex justify-between items-center mb-12">
+        <h2 class="text-3xl font-bold">New <span class="text-blue-400">Arrivals</span></h2>
+        <a routerLink="/new-arrivals" class="text-blue-400 hover:underline">View All</a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div *ngFor="let product of products()" 
+             class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group">
+          <div class="relative overflow-hidden h-48">
+            <img [alt]="product?.name"
+            [src]="'/assets/images/img' + product.product_id + '.jpg'"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full w-full transition-all">
+                Quick View
+              </button>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-1">{{product.name}}</h3>
+            <p class="text-blue-400 font-bold">${{product.unit_price | number:'1.2-2'}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Deals Banner -->
+    <section class="py-20 px-8 lg:px-32 bg-gradient-to-r from-blue-900 to-purple-900">
+      <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-6">Limited Time <span class="text-yellow-400">Deals</span></h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">Don't miss our exclusive offers on premium electronics. Save big on the latest tech.</p>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div class="bg-black bg-opacity-30 rounded-lg p-4 text-center">
+            <div class="text-4xl font-bold mb-2" id="days">00</div>
+            <div class="text-gray-300">Days</div>
+          </div>
+          <div class="bg-black bg-opacity-30 rounded-lg p-4 text-center">
+            <div class="text-4xl font-bold mb-2" id="hours">00</div>
+            <div class="text-gray-300">Hours</div>
+          </div>
+          <div class="bg-black bg-opacity-30 rounded-lg p-4 text-center">
+            <div class="text-4xl font-bold mb-2" id="minutes">00</div>
+            <div class="text-gray-300">Minutes</div>
+          </div>
+          <div class="bg-black bg-opacity-30 rounded-lg p-4 text-center">
+            <div class="text-4xl font-bold mb-2" id="seconds">00</div>
+            <div class="text-gray-300">Seconds</div>
+          </div>
+        </div>
+        
+        <button class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-8 py-3 rounded-full font-bold text-lg transition-all transform hover:scale-105">
+          Shop Deals
+        </button>
+      </div>
+    </section>
+
+    <div class="relative bg-black py-12 overflow-hidden">
+        <div class="container mx-auto px-4">
+          <h2 class="text-2xl font-semibold text-white mb-6">Featured XTech Products</h2>
+          
+          <div class="relative">
+            <!-- Infinite Scroll Container -->
+            <div class="scroll-container flex overflow-x-auto snap-x snap-mandatory no-scrollbar">
+              <div *ngFor="let product of duplicatedProducts()" 
+                   class="flex-shrink-0 w-64 mx-3 snap-start">
+                <div class="bg-gray-900 rounded-xl overflow-hidden h-full flex flex-col">
+                  <div class="h-48 overflow-hidden">
+                    <div class="relative h-64 overflow-hidden group">
+                        <img [src]="product.image" [alt]="product.title" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                      </div>
+                  </div>
+                  <div class="p-4 flex-grow">
+                    <span class="text-gray-400 text-sm">{{product.category}}</span>
+                    <h3 class="text-white font-medium mt-1">{{product.title}}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Gradient fade effects -->
+            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+          </div>
+        </div>
+      </div>
+  
+    <!-- Testimonials -->
+    <section class="py-20 px-8 lg:px-32 bg-gray-800">
+      <h2 class="text-3xl font-bold text-center mb-16">What Our <span class="text-blue-400">Customers</span> Say</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div *ngFor="let i of [1,2,3]" class="bg-gray-700 rounded-xl p-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 rounded-full bg-gray-600 mr-4 overflow-hidden">
+              <img src="/assets/images/avatar-{{i}}.jpg" alt="Customer" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-semibold">Customer {{i}}</h4>
+              <div class="flex text-yellow-400">
+                <span *ngFor="let star of [1,2,3,4,5]">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-300">"XTech has the best selection of electronics I've ever seen. Fast shipping and excellent customer service!"</p>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Newsletter -->
+    <section class="py-20 px-8 lg:px-32">
+      <div class="max-w-4xl mx-auto bg-gray-800 rounded-2xl p-8 md:p-12 text-center">
+        <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+        <p class="text-xl text-gray-400 mb-8">Subscribe to our newsletter for the latest product releases and exclusive deals.</p>
+        
+        <form class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+          <input type="email" placeholder="Your email address" 
+                 class="flex-grow px-6 py-4 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <button type="submit" 
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-all transform hover:scale-105">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>

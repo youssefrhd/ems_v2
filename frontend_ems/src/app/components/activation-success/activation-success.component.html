@@ -1,0 +1,15 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+    <div class="bg-white p-8 rounded-lg shadow-md text-center">
+      <h1 class="text-2xl font-bold mb-4">Activation Successful!</h1>
+      <p class="text-slate-600 mb-6">
+        Your account has been successfully activated. You will be redirected to the login page in
+        <span class="font-semibold text-indigo-600">{{ countdown }}</span> seconds.
+      </p>
+      <button
+        [routerLink]="['/login']" 
+        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Go to Login
+      </button>
+    </div>
+  </div>

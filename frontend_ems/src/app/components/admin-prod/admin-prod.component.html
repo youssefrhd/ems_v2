@@ -1,0 +1,197 @@
+<div class="min-h-screen" [class.dark]="isDarkMode">
+  <div class="container mx-auto px-4 py-8 dark:bg-gray-900 dark:text-white">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Product Inventory</h1>
+      <div class="flex space-x-4">
+        <button
+          (click)="toggleDarkMode()"
+          class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700"
+        >
+          {{ isDarkMode ? "☀️ Light" : "🌙 Dark" }} Mode
+        </button>
+        <button
+          (click)="exportToExcel()"
+          class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+        >
+          Export to Excel
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto shadow-md rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right">
+        <thead
+          class="text-xs uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-300"
+        >
+          <tr>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('product_id')"
+            >
+              ID
+              <span *ngIf="sortedColumn === 'product_id'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('name')"
+            >
+              Product Name
+              <span *ngIf="sortedColumn === 'name'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('description')"
+            >
+              Description
+              <span *ngIf="sortedColumn === 'description'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('unit_price')"
+            >
+              Price
+              <span *ngIf="sortedColumn === 'unit_price'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('inStock')"
+            >
+              Stock
+              <span *ngIf="sortedColumn === 'inStock'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 cursor-pointer"
+              (click)="sort('discount')"
+            >
+              Discount
+              <span *ngIf="sortedColumn === 'discount'">{{
+                sortDirection === "asc" ? "↑" : "↓"
+              }}</span>
+            </th>
+            <th scope="col" class="px-6 py-3">Image</th>
+            <th scope="col" class="px-6 py-3 cursor-pointer"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let product of products()"
+            class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            <td class="px-6 py-4">{{ product.product_id }}</td>
+            <td class="px-6 py-4 font-medium">{{ product.name }}</td>
+            <td class="px-6 py-4">{{ product.description }}</td>
+            <td class="px-6 py-4">
+              <span
+                [class.line-through]="product.discount > 0"
+                [class.text-gray-400]="product.discount > 0"
+              >
+                ${{ product.unit_price.toFixed(2) }}
+              </span>
+              <span *ngIf="product.discount > 0" class="ml-2 text-green-500">
+                ${{
+                  (product.unit_price * (1 - product.discount / 100)).toFixed(2)
+                }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span
+                [class.text-red-500]="product.inStock < 10"
+                [class.text-yellow-500]="
+                  product.inStock >= 10 && product.inStock < 30
+                "
+                [class.text-green-500]="product.inStock >= 30"
+              >
+                {{ product.inStock }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span
+                *ngIf="product.discount > 0"
+                class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+              >
+                {{ product.discount }}% OFF
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <img
+                [src]="'/assets/images/img' + product.product_id + '.jpg'"
+                class="w-10 h-10 rounded-full object-cover"
+                alt="Product image"
+              />
+            </td>
+            <td
+              class="px-6 py-4 whitespace-nowrap text-sm font-medium relative"
+            >
+              <div class="flex justify-end">
+                <button
+                  (click)="toggleMenu(product.product_id, $event)"
+                  aria-label="Open actions menu"
+                  aria-haspopup="true"
+                  [attr.aria-expanded]="activeMenu === product.product_id"
+                  class="p-1 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div
+                *ngIf="activeMenu === product.product_id"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-100 dark:bg-gray-800 dark:border-gray-700"
+              >
+                <div class="py-1">
+                  <button
+                    (click)="editProduct(product); $event.stopPropagation()"
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    (click)="previewProduct(product); $event.stopPropagation()"
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    Preview
+                  </button>
+                  <button
+                    (click)="
+                      deleteProduct(product.product_id);
+                      $event.stopPropagation()
+                    "
+                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

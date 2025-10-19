@@ -1,0 +1,70 @@
+<div class="container mx-auto p-4">
+  <div class="text-sm text-gray-500 mb-4">
+    <a href="#" class="hover:underline">Home</a> /
+    <a [routerLink]="['/products']" routerLinkActive="router-link-active"  class="hover:underline">Products</a> / Shopping bag
+  </div>
+
+  <h1 class="text-3xl font-bold mb-6">Your bag</h1>
+
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Cart Items -->
+    <div class="flex-1 flex-col space-y-6">
+      <div *ngFor="let cartItem of cartSignal(); trackBy: trackByFn" class="flex justify-start items-center space-x-4 bg-white shadow rounded-lg p-4">
+        <div class="flex-1 items-center">
+          <img src="/assets/images/img{{ cartItem.product.product_id }}.jpg" alt="{{ cartItem.product.name }}" class="w-24 h-24 rounded-md mr-4" />
+          <h3 class="text-xl font-semibold">{{ cartItem.product.name }}</h3>
+          <div class="space-y-2 justify-between">
+            <div class="flex items-center space-x-5">
+              <span class="text-2xl font-bold text-gray-900">${{ updatedPrice(cartItem.product) }}</span>
+              <span class="text-orange-500 font-bold text-lg bg-orange-100 px-2 py-1 rounded-md">- {{ cartItem.product.discount }} %</span>
+              <div class="flex items-center border rounded-lg overflow-hidden">
+                <input 
+                  type="number" 
+                  class="px-4 py-2 bg-white text-black-900" 
+                  [value]="cartItem.quantity"
+                  (change)="updateQuantity(cartItem, $event)" 
+                  min="1"
+                  aria-label="Quantity"
+                  aria-describedby="quantity-input"
+                />
+              </div>
+            </div>
+            <span class="line-through text-gray-400">${{ cartItem.product.unit_price }}</span>
+          </div>
+        </div>
+
+        <div class="ml-auto flex items-center">
+          <button 
+            class="text-red-500 hover:underline"
+            (click)="removeItem(cartItem)"
+            aria-label="Remove item from cart"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="w-full lg:w-1/3 bg-white shadow rounded-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4">Order Summary</h2>
+      <div class="space-y-2">
+        <div class="flex justify-between text-lg">
+          <span>Subtotal</span>
+          <span>${{ totalAmount() | number :'1.2-2'}}</span>
+        </div>
+        <div class="flex justify-between text-lg">
+          <span>Shipping Charges</span>
+          <span>$150</span>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-between text-xl font-bold">
+        <span>Total Price</span>
+        <span>${{ totalPrice | number:'1.2-2'}}</span>
+      </div>
+      <button class="w-full mt-6 bg-gray-800 text-white py-2 rounded-lg text-lg hover:bg-gray-900" (click)="checkOut()">
+        Proceed to checkout
+      </button>
+    </div>
+  </div>
+</div>

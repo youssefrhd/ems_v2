@@ -1,0 +1,82 @@
+<div class="bg-black min-h-screen">
+  <div
+    class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+  >
+    <h2 class="text-2xl font-bold tracking-tight text-white">
+      Customers also purchased
+    </h2>
+
+    <!-- Product list -->
+    <div
+      
+      class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
+    >
+      <div
+        *ngFor="let product of products()"
+        class="relative group bg-white/10 backdrop-blur-lg border border-gray-700 rounded-lg p-4 shadow-lg transition-all duration-300 hover:bg-gray-800/40 flex flex-col justify-between"
+      >
+        <div
+          class="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500 to-white-500 opacity-0 group-hover:opacity-100 group-hover:blur-lg transition-all duration-300"
+        ></div>
+
+        <div class="relative">
+          <div
+            class="h-80 w-full flex items-center justify-center bg-gray-200 rounded-md overflow-hidden"
+          >
+            <img
+              *ngIf="product?.product_id"
+              [alt]="product?.name"
+              [src]="'/assets/images/img' + product.product_id + '.jpg'"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="mt-4 text-center justify-between">
+            <h3 class="text-sm text-white font-semibold">
+              <a href="#">
+                {{ product?.name }}
+              </a>
+            </h3>
+            <div>
+              <p class="mt-1 text-sm text-gray-400">
+                {{ product?.description }}
+              </p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-white">
+                ${{ product?.unit_price }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex mt-4 items-center justify-center gap-4">
+          <button
+            (click)="addToCart(product)"
+            class="relative rounded w-32 h-12 overflow-hidden group bg-red-600 hover:bg-gradient-to-r hover:from-red-800 hover:to-red-600 text-white hover:ring-2 hover:ring-offset-2 hover:ring-black-400 transition-all ease-out duration-300 flex items-center justify-center"
+          >
+            <span
+              class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-black opacity-10 rotate-12 group-hover:-translate-x-40 ease"
+            ></span>
+            <span class="relative">Add to Cart</span>
+          </button>
+
+          <button
+            *ngIf="product?.product_id"
+            (click)="viewDetails(product.product_id)"
+            class="relative rounded w-32 h-12 overflow-hidden group bg-blue-800 hover:bg-gradient-to-r hover:from-blue-800 hover:to-blue-600 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300 flex items-center justify-center"
+          >
+            <span
+              class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-black opacity-10 rotate-12 group-hover:-translate-x-40 ease"
+            ></span>
+            <span class="relative">View Details</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No products available -->
+    <ng-template #noProducts>
+      <p class="text-center text-gray-400">No products available.</p>
+    </ng-template>
+  </div>
+</div>

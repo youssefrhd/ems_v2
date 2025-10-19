@@ -1,0 +1,6 @@
+<div class="text-center bg-transparent font-sans w-full h-full dark:bg-gray-900 dark:text-white">
+    <div class="dark:text-gray-200">Total amount to pay: {{ amount | number :'1.2-2'}}</div>
+    <div class=" dark:text-gray-400">Please do not refresh the browser while the transaction is processing</div>
+    <div class="items-center" #paymentRef></div>
+    <div [routerLink]="['/shopping-cart']"></div>
+  </div>

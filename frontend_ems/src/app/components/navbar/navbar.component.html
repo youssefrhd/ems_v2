@@ -1,0 +1,77 @@
+<nav class="bg-black shadow shadow-red-500 w-full px-8 md:px-auto">
+  <div class="md:h-16 h-28 mx-auto md:px-4 container flex items-center justify-between flex-wrap md:flex-nowrap">
+    <!-- Logo -->
+    <div class="text-red-500 md:order-1 order-1">
+      <a [routerLink]="['/home']">
+        <app-logo-anim></app-logo-anim>
+      </a>
+    </div>
+
+    <!-- Hamburger Menu for Mobile -->
+    <div class="md:hidden order-3">
+      <button (click)="toggleMenu()" class="text-white focus:outline-none">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    
+    <div *ngIf="!(isLoggedIn$ | async)" class="button-container order-2 flex items-center max-h-full gap-4">
+      <button class="button hover:bg-gray-700 p-2 rounded" [routerLink]="['home']">
+        <svg class="icon" fill="currentColor" viewBox="0 0 1024 1024" height="1em" width="1em">
+          <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204z"></path>
+        </svg>
+      </button>
+      <button class="button hover:bg-gray-700 p-2  rounded">
+        <svg class="icon" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+
+      <!-- Profile Dropdown -->
+      <div class="relative inline-block">
+        <button class="button hover:bg-gray-700 p-2 rounded" (mouseenter)="openDropdown()"
+        (mouseleave)="closeDropdown()"
+    (click)="toggleDropdown()">
+          <svg class="icon" fill="currentColor" viewBox="0 0 24 24" height="1em" width="1em">
+            <path d="M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5Z"></path>
+          </svg>
+        </button>
+        
+        <div *ngIf="isDropdownOpen"  class="absolute mt-2 w-48 bg-black text-white rounded-md shadow-lg py-2">
+          <a [routerLink]="['/dashbord']" class="block px-5 py-2 bg-black hover:bg-gray-700">Dashboard</a>
+          <a routerLink="/settings" class="block px-5 py-2 hover:bg-gray-700">contact</a>
+          <a *ngIf="!(isLoggedIn$ | async)" routerLink="/login" class="block px-5 py-2 hover:bg-gray-700">Join us</a>
+          <a *ngIf="isLoggedIn$ | async"  (click)="logout()" class="block px-5 py-2 hover:bg-gray-700 cursor-pointer">Logout</a>
+        </div>
+      </div>
+
+      <!-- Shopping Cart -->
+      <button class="button hover:bg-gray-700 p-2 rounded">
+        <svg class="icon" [routerLink]="['/shopping-cart']" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Authentication Buttons -->
+    <div *ngIf="!(isLoggedIn$ | async)" class="hidden md:flex order-2 md:order-3 items-center gap-4">
+      <button [routerLink]="['/login']" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-red-500 rounded-xl flex items-center">
+        <span>Join us</span>
+      </button>
+    </div>
+
+    <!-- Profile & Logout Buttons -->
+    <div *ngIf="isLoggedIn$ | async" class="hidden md:flex order-2 md:order-3 items-center gap-4">
+      <a routerLink="/profile" class="text-red-500 hover:text-red-600">
+        <i class="fas fa-user-circle text-2xl"></i>
+      </a>
+      <button (click)="logout()" class="px-4 py-2 bg-transparent text-white rounded-xl flex items-center hover:bg-gray-700">
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,41 @@
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Apple-style smooth scrolling */
+  .scroll-container {
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 20%,
+      black 80%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 20%,
+      black 80%,
+      transparent
+    );
+  }
+  
+  /* Pause on hover */
+  .scroll-container:hover {
+    animation-play-state: paused;
+  }
+  
+  /* Product card styling */
+  .product-card {
+    transition: all 0.3s ease;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
