@@ -1,0 +1,28 @@
+# -------------------------------
+# OS files
+# -------------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------------
+# IntelliJ IDEA files
+# -------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# -------------------------------
+# Maven / Java
+# -------------------------------
+ems_backend/target/
+*.log
+*.class
+
+# -------------------------------
+# Node / Angular
+# -------------------------------
+frontend_ems/node_modules/
+frontend_ems/dist/
+frontend_ems/.angular/
+frontend_ems/.vscode/
