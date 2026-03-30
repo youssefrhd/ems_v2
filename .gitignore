@@ -1,12 +1,8 @@
-# -------------------------------
-# OS files
-# -------------------------------
+
 .DS_Store
 Thumbs.db
 
-# -------------------------------
-# IntelliJ IDEA files
-# -------------------------------
+
 .idea/
 *.iml
 *.ipr
@@ -35,16 +31,12 @@ application.yml
 
 *.swp
 
-# -------------------------------
-# Maven / Java
-# -------------------------------
+
 backend/target/
 *.log
 *.class
 
-# -------------------------------
-# Node / Angular
-# -------------------------------
+
 frontend/node_modules/
 frontend/dist/
 frontend/.angular/
