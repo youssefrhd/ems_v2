@@ -40,3 +40,26 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+target/
+*.log
+hs_err_pid*
+*.pem
+*.p12
+*.key
+
+node_modules/
+dist/
+.angular/
+
+.env
+application.properties
+application.yml
+
+*.swp

@@ -12,17 +12,40 @@ Thumbs.db
 *.ipr
 *.iws
 
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+target/
+*.log
+hs_err_pid*
+*.pem
+*.p12
+*.key
+
+node_modules/
+dist/
+.angular/
+
+.env
+application.properties
+application.yml
+
+*.swp
+
 # -------------------------------
 # Maven / Java
 # -------------------------------
-ems_backend/target/
+backend/target/
 *.log
 *.class
 
 # -------------------------------
 # Node / Angular
 # -------------------------------
-frontend_ems/node_modules/
-frontend_ems/dist/
-frontend_ems/.angular/
-frontend_ems/.vscode/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.vscode/

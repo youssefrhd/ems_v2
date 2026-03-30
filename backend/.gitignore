@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+target/
+*.log
+hs_err_pid*
+*.pem
+*.p12
+*.key
+
+
+
+.env
+application.properties
+
+*.swp
