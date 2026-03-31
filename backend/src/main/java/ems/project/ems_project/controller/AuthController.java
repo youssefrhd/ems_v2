@@ -49,7 +49,7 @@ public class AuthController {
         String jwtToken = this.jwtService.generateToken(authenticatedUser);
         System.out.println("jwt token : "+jwtToken);
         if (authenticatedUser == null) {
-            System.out.println("🚨 Authentication failed: User is null!");
+            System.out.println("Authentication failed: User is null!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } else {
             LoginResponse loginResponse = new LoginResponse(authenticatedUser.getEmail(),authenticatedUser.getRole(),jwtToken, this.jwtService.getExpirationTime());
