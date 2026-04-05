@@ -6,6 +6,7 @@ import { response } from 'express';
 import { ProductServiceService } from '../../services/product-service.service';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { MatDialogRef } from '@angular/material/dialog';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-login',
@@ -18,12 +19,13 @@ export class LoginComponent implements OnInit{
   loginForm!:FormGroup;
   isDarkMode: boolean = false;
   loginError :string | null=null;
-
+  user : User | null =null;
   isLoggedIn: boolean = false; 
 
-  hidePassword = true; // Toggle for hiding/showing password
-  faEye = faEye; // FontAwesome eye icon
-  faEyeSlash = faEyeSlash;
+  hidePassword = true; 
+  faEye = faEye;   faEyeSlash = faEyeSlash;
+   password= '';
+   email='';
   constructor(private fb : FormBuilder, private authServ:AuthServiceService, private router:Router,private prodServ:ProductServiceService){
 
   }
@@ -39,11 +41,9 @@ export class LoginComponent implements OnInit{
     });
   }
 
-  // Function to toggle dark mode
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
 
-    // Add or remove the 'dark' class from the <body> element to apply dark mode globally
     if (this.isDarkMode) {
       document.body.classList.add('dark');
     } else {
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit{
     if (this.loginForm && this.loginForm.valid) {
       const loginData = this.loginForm.value;
   
-      this.authServ.login(loginData).subscribe(
+      this.authServ.login(this.email,this.password).subscribe(
         (response) => {
           const redirectPath = response.role === 'admin' 
                     ? '/admin/dashbord' 

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthServiceService {
-
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isLoggedInSubject: BehaviorSubject<boolean>;
   isLoggedIn$ : Observable<boolean>
 
@@ -33,6 +33,9 @@ export class AuthServiceService {
   }
 
 
+  getCurrentUser$(): Observable<User | null> {
+    return this.currentUserSubject.asObservable();
+  }
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
@@ -40,22 +43,20 @@ export class AuthServiceService {
       const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
       const expirationTime = userInfo.expiresIn;
       if (expirationTime && new Date().getTime() < expirationTime) {
-        return true; // Token is valid
+        return true;
       }
     }
-    this.logout(); // Token expired or missing, log out the user
+    this.logout(); 
     return false;
   }
 
   signup(user: User): Observable<any> {
     return this.http.post(`${this.apiUrl}/signup`, user).pipe(
       tap((response: any) => {
-        //console.log('Backend response:', response); // Debugging line
         if (response) {
-          //console.log('Storing user in local storage:', response); // Debugging line
           localStorage.setItem('user', JSON.stringify(response));
         } else {
-          console.error('No response received from the backend:', response); // Debugging line
+          console.error('No response received from the backend:', response); 
         }
       })
     );
@@ -79,19 +80,25 @@ export class AuthServiceService {
   }
   
   
-  login(loginReq: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, loginReq).pipe(
-      tap((response: any) => {
-        const expirationTime = response.expiresIn;
-        localStorage.setItem('userInfo', JSON.stringify(response)); // Save user info
-        localStorage.setItem('token', response.token); // Save token
-
-        this.isLoggedInSubject.next(true); // Update login state
-        this.autoLogout(expirationTime);
-
-        
-        
-
+  login(email:string,password:string): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/login`, {email,password}).pipe(
+      tap((response) => {
+        if(response.email){
+          const user:User={
+            email:response.email || email,
+            password:response.password || password,
+            username:response.username || email,
+            expiresIn:response.expiresIn || Date.now().toString(),
+            name:response.name || response.username,
+            role:response.role || 'client'
+            
+          }
+          this.currentUserSubject.next(response)
+          this.isLoggedInSubject.next(true); 
+          console.log("logged user : ",JSON.stringify(user));
+        }
+        localStorage.setItem('userInfo', JSON.stringify(response)); 
+        //this.autoLogout(expirationTime);
        
       }),
       catchError((error) => {
@@ -108,7 +115,6 @@ export class AuthServiceService {
     return this.http.post(`${this.apiUrl}/verify`, otpVer).pipe(
       tap((response) => {
         alert('Verified Successfully!');
-        localStorage.removeItem('user');
         console.log('Verification successful!', response);
         this.router.navigate(['/activation-success']);
       }),

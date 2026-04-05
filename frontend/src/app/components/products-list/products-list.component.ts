@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, inject, Input, OnInit, Output, Signal, signal } from '@angular/core';
+import { Component, effect, EventEmitter, Inject, inject, Input, OnInit, Output, Signal, signal } from '@angular/core';
 import { ProductServiceService } from '../../services/product-service.service';
 import { Product } from '../../models/product';
 import { CartItem } from '../../models/cart-item';
@@ -15,44 +15,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductsListComponent implements OnInit {
   
   @Output() ItemProduct=new EventEmitter<Product>();
-  products=signal<Product[]>([]);
-  
-  isLoading=true;
+
+  private productService = inject(ProductServiceService); 
+  products = this.productService.productsSignal;
+  isLoading=signal(true);
+
   error: string | null = null;
 
- constructor(public productService:ProductServiceService,private router:Router,private route:ActivatedRoute){ 
-   productService.loadProducts();
-   this.products=productService.productsSignal
+ constructor(private router:Router,private route:ActivatedRoute){ 
+   
  }
  ngOnInit(): void {
-  this.loadProducts();
-  this.productService.loadProducts();
-  this.products=this.productService.productsSignal
+    this.productService.fetchProducts();
+    this.isLoading.set(this.productService.loading());
 }
-
-loadProducts() {
-  this.isLoading = true;
-
-  this.productService.fetchProducts().subscribe({
-    next: (products) => {
-      this.isLoading = false;
-      this.products.set(products); 
-      localStorage.setItem('products', JSON.stringify(products)); 
-    },
-    error: (err) => {
-      this.isLoading = false;
-      this.error = 'Failed to load products';
-      console.error(err);
-    },
-  });
-}
+ 
 
   viewDetails(productId:number){
-     this.productService.getProductById(productId).subscribe(
-      (response)=> this.router.navigate(['/product-details',productId]),
-      (error)=>console.log("product can not be found !")
-     )
-
+     this.router.navigate(['/product-details',productId]);
   }
 
   addToCart(product: Product) {

@@ -8,20 +8,24 @@ import { response } from 'express';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductServiceService implements OnInit {
+export class ProductServiceService {
  
   private http = inject(HttpClient);
 
   private apiUrl = 'http://localhost:8080/api/products';
   productsSignal = signal<Product[]>([]);
+  loaded: boolean=false;
+  loading=signal(false);
+  products=computed(()=>{
+    if(!this.loaded){
+      this.fetchProducts();
+      this.loaded=true;
+    }
+     return this.productsSignal();
+  });
 
-  constructor() {
-    this.loadProducts();
-  }
-  ngOnInit(): void {
-    this.fetchProducts()
-  }
-
+ 
+/*
   loadProducts() {
     const savedProducts = localStorage.getItem('products');
     if (savedProducts) {
@@ -31,12 +35,18 @@ export class ProductServiceService implements OnInit {
         (data)=> this.productsSignal.set(data)
       ); 
     }
-  }
+  }*/
 
-  fetchProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl).pipe(
-      tap((products) => this.setProducts(products))
-    );
+  fetchProducts(): void {
+    this.loading.set(true);
+    this.http.get<Product[]>(this.apiUrl).subscribe({
+      next : (products)=>{
+        this.productsSignal.set(products);
+        this.loaded=true;
+        this.loading.set(false);
+      },
+      error : (err)=> console.error("Products can not be loaded",err)
+    });
   }
 
  
@@ -48,28 +58,22 @@ export class ProductServiceService implements OnInit {
 
 
  
-  getProductById(productId: number): Observable<Product | null> {
+ public getProductById(productId: number): Observable<Product | null> {
     return this.http.get<Product>(`${this.apiUrl}/searchProduct/${productId}`).pipe(
-      map((response) => {
-        if (!response) return null;
-  
-        return new Product(
-          response.product_id, 
-          response.name, 
-          response.description || 'No description available', 
-          response.unit_price, 
-          response.inStock ?? 0, 
-          response.photo || 'default-image.jpg',   
-          response.discount ?? 0 
-        );
-  
-  
-      }),
-      tap((product) => console.log('Transformed Response:', product)),
-      catchError((error) => {
-        console.error('Error fetching product:', error);
-        return of(null);
-      })
+      map((res) =>
+        res
+          ? new Product(
+              res.product_id,
+              res.name,
+              res.description || 'No description available',
+              res.unit_price,
+              res.inStock ?? 0,
+              res.photo || 'default-image.jpg',
+              res.discount ?? 0
+            )
+          : null
+      ),
+      catchError(() => of(null))
     );
   }
   deleteProduct(productId: number): Observable<void> {

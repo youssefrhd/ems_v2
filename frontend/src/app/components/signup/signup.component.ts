@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
@@ -15,13 +15,13 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export class SignupComponent {
   signupForm!: FormGroup;
-  registredUser=signal<User| null>(null);
+  registredUser = signal<User | null>(null);
 
-  hidePassword = true; // Toggle for hiding/showing password
-    faEye = faEye; // FontAwesome eye icon
-    faEyeSlash = faEyeSlash;
+  hidePassword = true;
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
 
-  constructor(private fb: FormBuilder , private authServ:AuthServiceService , private router:Router) {
+  constructor(private fb: FormBuilder, private authServ: AuthServiceService, private router: Router) {
     this.signupForm = this.fb.group(
       {
         userName: ['', Validators.required],
@@ -34,7 +34,7 @@ export class SignupComponent {
       }
     );
   }
- 
+
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
@@ -43,28 +43,31 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    const user :User = {
-      username:this.signupForm.get('userName')?.value,
+    const user: User = {
+      username: this.signupForm.get('userName')?.value,
       email: this.signupForm.get('email')?.value,
-      password: this.signupForm.get('password')?.value
+      password: this.signupForm.get('password')?.value,
+      name:' ',
+      expiresIn:'',
+      role:'client'
     };
     this.authServ.signup(user).subscribe({
       next: (response) => {
         alert('Signed up !');
         const userString = localStorage.getItem('user');
-        console.log('Raw data from local storage:', userString); // Debugging line
-        
+        console.log('Raw data from local storage:', userString); 
+
         if (userString) {
           try {
             const user = JSON.parse(userString);
-            console.log('Parsed user object:', user); // Debugging line
+            console.log('Parsed user object:', user); 
           } catch (error) {
-            console.error('Failed to parse user object:', error); // Debugging line
+            console.error('Failed to parse user object:', error);
           }
         } else {
-          console.log('No user data found in local storage.'); // Debugging line
+          console.log('No user data found in local storage.'); 
         }
-        this.router.navigate(['/verification']); 
+        this.router.navigate(['/verification']);
       },
       error: (error) => {
         console.error('Signup failed:', error);

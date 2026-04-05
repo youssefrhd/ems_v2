@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, Signal } from '@angular/core';
+import { Component, inject, OnInit, signal, Signal } from '@angular/core';
 
 import * as XLSX from 'xlsx';
 import { Product } from '../../models/product';
@@ -15,10 +15,10 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './admin-prod.component.css'
 })
 export class AdminProdComponent implements OnInit {
-  
+  private prodServ=inject(ProductServiceService);
   products=signal<Product[]>([]);
   
-  isLoading=true;
+  isLoading=signal(true);
   error: string | null = null;
 
 
@@ -27,32 +27,16 @@ export class AdminProdComponent implements OnInit {
   isDarkMode = false;
  
 
-  constructor(private prodServ:ProductServiceService,private snackBar: MatSnackBar){
-    this.prodServ.loadProducts();
-  }
-
-  ngOnInit(): void {
-    this.prodServ.loadProducts();
-   this.products=this.prodServ.productsSignal
+  constructor(private snackBar: MatSnackBar){
     
   }
 
-  loadProducts() {
-    this.isLoading = true;
-  
-    this.prodServ.fetchProducts().subscribe({
-      next: (products) => {
-        this.isLoading = false;
-        this.products.set(products); 
-        localStorage.setItem('products', JSON.stringify(products)); // Store products in localStorage
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.error = 'Failed to load products';
-        console.error(err);
-      },
-    });
+  ngOnInit(): void {
+    this.prodServ.fetchProducts();
+    this.isLoading.set(this.prodServ.loading());
+    
   }
+
 
   sort(column: string) {
     if (this.sortedColumn === column) {

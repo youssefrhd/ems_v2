@@ -14,10 +14,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class CartServiceImpl implements CartService {
-    private LineItemRepository lineItemRepository;
-    private ProductRepository productRepository;
+    private final LineItemRepository lineItemRepository;
+    private final ProductRepository productRepository;
+
+    public CartServiceImpl(LineItemRepository lineItemRepository, ProductRepository productRepository) {
+        this.lineItemRepository = lineItemRepository;
+        this.productRepository = productRepository;
+    }
+
     public LineItemDTO addToCart(Long productId) {
         Product product=productRepository.findById(productId).orElseThrow(()->new ResourceNotFound("it's no Product with the given ID"));
         LineItem LineItm =new LineItem(0,product);

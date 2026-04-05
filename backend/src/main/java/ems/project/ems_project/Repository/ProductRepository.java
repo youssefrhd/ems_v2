@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    @Query("SELECT p.category as category, COUNT(p) as count FROM product p GROUP BY p.category")
+    @Query("SELECT p.category as category, COUNT(p) as count FROM Product p GROUP BY p.category")
     List<CategoryCountProjection> countProductsByCategory();
 
 

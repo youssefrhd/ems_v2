@@ -35,8 +35,8 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password" ,nullable=false)
     private String password;
-    @Column(name = "role" ,columnDefinition = "VARCHAR(255) DEFAULT 'client'")
-    private String role;
+    @Column(name = "role" )
+    private String role="ROLE_USER";
     @Column(name = "isLoggedIn",columnDefinition = "boolean default false")
     private Boolean isLoggedIn;
     @Column(name = "verification_code")

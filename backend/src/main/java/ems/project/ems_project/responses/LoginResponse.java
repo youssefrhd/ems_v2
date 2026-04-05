@@ -11,16 +11,19 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginResponse {
 
-
+    private Long userID;
+    private String username;
     private String role;
     private String email;
     private String token;
     private long expiresIn;
 
-    public LoginResponse(String email ,String role ,String token, long expiresIn) {
-       this.role=role;
-       this.email=email;
+    public LoginResponse(Long userID,String username, String role, String email, String token, long expiresIn) {
+        this.userID = userID;
+        this.role = role;
+        this.email = email;
         this.token = token;
+        this.username=username;
         this.expiresIn = expiresIn;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { Product } from '../../models/product';
 import { ProductServiceService } from '../../services/product-service.service';
 import { CategoryCountDto, CategoryService } from '../../services/CategoryService';
@@ -15,20 +15,18 @@ export class HomeComponent implements OnDestroy , OnInit{
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   categoryCount=signal<CategoryCountDto[]>([]);
 
-
-  products=signal<Product[]>([]);
-  isLoading=true;
+  private prodServ=inject(ProductServiceService);
+  
+  products=this.prodServ.productsSignal;
+  isLoading=signal(true);
   error: string | null = null;
 
   duplicatedProducts = signal<any[]>([]);
-  private animationFrameId: number | null = null; // Initialize as null
+  private animationFrameId: number | null = null;
   private scrollSpeed = 1.5;
   private scrollPosition = 0;
-  constructor(private prodServ:ProductServiceService,private catServ:CategoryService){
+  constructor(private catServ:CategoryService){
 
-
-    this.prodServ.loadProducts();
-    this.products=this.prodServ.productsSignal
     effect(() => {
       this.duplicatedProducts.set([...this.products(), ...this.products()]);
     });
@@ -36,12 +34,8 @@ export class HomeComponent implements OnDestroy , OnInit{
     this.startAutoScroll();
 }
 ngOnInit(): void {
- /* this.catServ.getCategoryCounts().subscribe(
-    (data)=> {
-      this.categoryCount.set(data);
-      console.log(data);}
-  )*/
- this.loadCategories();
+ this.prodServ.fetchProducts();
+    this.isLoading.set(this.prodServ.loading());
 }
 getCategoryIcon(category: string): string {
   return CATEGORY_ICONS[category as keyof typeof CATEGORY_ICONS] || 'fa-tag';
@@ -90,22 +84,7 @@ ngOnDestroy() {
 }
  
 
-  loadProducts() {
-    this.isLoading = true;
   
-    this.prodServ.fetchProducts().subscribe({
-      next: (products) => {
-        this.isLoading = false;
-        this.products.set(products); 
-        localStorage.setItem('products', JSON.stringify(products)); // Store products in localStorage
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.error = 'Failed to load products';
-        console.error(err);
-      },
-    });
-  }
 
 
   categories = [

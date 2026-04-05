@@ -17,6 +17,8 @@ export class AdminSpaceComponent implements OnInit{
     loginError :string | null=null;
   
     isLoggedIn: boolean = false; 
+password='';
+email='';
 
   constructor(private fb:FormBuilder,private authServ:AuthServiceService,private router:Router) {}
   ngOnInit(): void {
@@ -32,7 +34,7 @@ export class AdminSpaceComponent implements OnInit{
 
     onSubmit() {
       if (this.loginForm.valid) {
-        this.authServ.login(this.loginForm.value).subscribe({
+        this.authServ.login(this.email,this.password).subscribe({
           next: (response) => {
             const redirectPath = response.role === 'admin' 
                     ? '/dashbord' 

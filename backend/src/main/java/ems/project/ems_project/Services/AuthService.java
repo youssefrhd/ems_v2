@@ -7,6 +7,7 @@ import ems.project.ems_project.Model.User;
 import ems.project.ems_project.Repository.UserRepository;
 
 import jakarta.mail.MessagingException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,13 +37,18 @@ public class AuthService {
             throw new RuntimeException("this email adresse is already used !");
         }else {
             User user = new User(input.getUsername(), input.getEmail(),passwordEncoder.encode(input.getPassword()));
-            user.setRole("client");
+            user.setRole("ROLE_USER");
             String generatedCode=generateVerificationCode();
             user.setVerificationCode(generatedCode);
             System.out.println("VerificationCode : "+generatedCode);
             user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
             user.setVerified(false);
-            sendVerificationEmail(user);
+            try {
+                sendVerificationEmail(user);
+            }catch(RuntimeException e){
+                System.out.printf("Verification Email can not be sent ");
+                e.printStackTrace();
+            }
             return userRepository.save(user);
         }
 
