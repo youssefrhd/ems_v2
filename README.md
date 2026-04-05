@@ -107,8 +107,7 @@ http://localhost:4200
 1. User logs in  
 2. Backend generates JWT token  
 3. Token is sent with each request  
-4. Spring Security validates token  
-5. Access granted based on roles  
+4. Spring Security validates token   
 
 ---
 
